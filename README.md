@@ -44,6 +44,15 @@ A modern gaming discovery platform built with **Next.js 16**, **TypeScript**, an
 - Responsive design for desktop, tablet, and mobile.
 - Graceful error handling.
 
+### Search
+
+- Search input in the app header.
+- Debounced live search results while typing.
+- Responsive dropdown results with game image, rating, and title.
+- Click-to-navigate to the game detail page.
+- Spinner loading state and no-results feedback.
+- Outside-click closing behavior with a reusable custom hook.
+
 ## 🛠 Tech Stack
 
 ### Frontend
@@ -121,7 +130,7 @@ npm run dev
 - [x] Home Page
 - [x] Browse Games
 - [x] Game Details
-- [ ] Search
+- [x] Search
 - [ ] Genres
 - [ ] Platforms
 - [ ] Authentication

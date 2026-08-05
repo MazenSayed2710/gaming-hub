@@ -137,7 +137,9 @@ export async function getPlatforms(): Promise<RawgPlatform[]> {
   return data.results;
 }
 
-export async function getGames(query: GamesQueryParams = {}): Promise<GamesListResult> {
+export async function getGames(
+  query: GamesQueryParams = {},
+): Promise<GamesListResult> {
   const page = query.page ?? 1;
   const minRating = query.minRating ? Number(query.minRating) : undefined;
 
@@ -176,12 +178,29 @@ export async function getGameById(id: string): Promise<RawgGameDetails> {
   return fetchRawg<RawgGameDetails>(`/games/${id}`);
 }
 
+export async function searchGames(query: string): Promise<RawgGame[]> {
+  if (!query.trim()) {
+    return [];
+  }
+  console.log("Searching games with query:", query);
+
+  const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", {
+    search: query.trim(),
+    page_size: 6,
+    ordering: "-added",
+  });
+
+  return data.results;
+}
+
 export interface RawgScreenshot {
   id: number;
   image: string;
 }
 
 export async function getScreenshots(id: string): Promise<RawgScreenshot[]> {
-  const data = await fetchRawg<{ results: RawgScreenshot[] }>(`/games/${id}/screenshots`);
+  const data = await fetchRawg<{ results: RawgScreenshot[] }>(
+    `/games/${id}/screenshots`,
+  );
   return data.results;
 }
