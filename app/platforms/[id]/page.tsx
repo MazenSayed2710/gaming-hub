@@ -1,74 +1,66 @@
 import { GameCard } from "@/components/home/GameCard";
-import CatalogHeader from "@/components/shared/CatalogHeader";
 import { GamesFilter } from "@/components/games/GamesFilter";
 import { GamesPagination } from "@/components/games/GamesPagination";
+import CatalogHeader from "@/components/shared/CatalogHeader";
+import SectionHeader from "@/components/shared/SectionHeader";
 import { getGames, getGenres, getPlatforms } from "@/lib/rawg";
 import { notFound } from "next/navigation";
 
-interface GenreDetailPageProps {
-  params: Promise<{ slug: string }>;
+interface PlatformDetailPageProps {
+  params: Promise<{ id: string }>;
   searchParams?: Promise<Record<string, string | undefined>>;
 }
 
-export default async function GenreDetailPage({
+export default async function PlatformDetailPage({
   params,
   searchParams,
-}: GenreDetailPageProps) {
-  const { slug } = await params;
+}: PlatformDetailPageProps) {
+  const { id } = await params;
   const paramsValue = (await searchParams) ?? {};
   const page = Number(paramsValue.page ?? "1");
-  const platform = paramsValue.platform ?? "";
+  const genre = paramsValue.genre ?? "";
   const rating = paramsValue.rating ?? "";
+  const platformId = Number(id);
 
-  const [genres, platforms, gamesResult] = await Promise.all([
-    getGenres(),
+  const [platforms, genres, gamesResult] = await Promise.all([
     getPlatforms(),
-    getGames({ page, genre: slug, platform, minRating: rating }),
+    getGenres(),
+    getGames({ page, platform: id, genre, minRating: rating }),
   ]);
 
-  const genre = genres.find((item) => item.slug === slug);
-  if (!genre) {
+  const platform = platforms.find((item) => item.id === platformId);
+  if (!platform) {
     notFound();
   }
 
   const totalPages = Math.max(1, Math.ceil(gamesResult.count / 12));
+  const basePath = `/platforms/${id}`;
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(129,140,248,0.16),transparent_40%)] text-slate-900 transition-colors duration-300 dark:text-slate-100">
       <CatalogHeader />
 
       <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
-        <section className="overflow-hidden rounded-4xl border border-slate-200/70 bg-white/80 p-8 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/70">
-          <div className="max-w-2xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-400">
-              Genre spotlight
-            </p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              {genre.name}
-            </h1>
-            <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-400">
-              Browse {genre.games_count} titles in this genre and refine the
-              list by platform or rating.
-            </p>
-          </div>
-        </section>
+        <SectionHeader
+          eyebrow="Platform spotlight"
+          title={platform.name}
+          description={`Browse ${platform.games_count} games available on ${platform.name}, then refine the list by genre or rating.`}
+        />
 
         <GamesFilter
           genres={genres}
           platforms={platforms}
-          currentGenre={slug}
-          currentPlatform={platform}
+          currentGenre={genre}
+          currentPlatform={id}
           currentRating={rating}
           page={page}
-          showGenreFilter={false}
-          showPlatformFilter
-          showRatingFilter
-          basePath={`/genres/${slug}`}
+          showPlatformFilter={false}
+          basePath={basePath}
         />
 
         {gamesResult.games.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-slate-300 bg-white/70 p-8 text-center text-slate-600 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-400">
-            No games found for this genre right now.
+            No games found for this platform right now.
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -81,8 +73,8 @@ export default async function GenreDetailPage({
         <GamesPagination
           currentPage={page}
           totalPages={totalPages}
-          searchParams={{ ...paramsValue, genre: slug }}
-          basePath={`/genres/${slug}`}
+          searchParams={{ ...paramsValue, platform: id }}
+          basePath={basePath}
         />
       </main>
     </div>

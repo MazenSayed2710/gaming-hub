@@ -39,6 +39,14 @@ A modern gaming discovery platform built with **Next.js 16**, **TypeScript**, an
 - Navigate from a genre to a filtered games collection.
 - Responsive genre card grid with loading and error states.
 
+### Platforms
+
+- Browse consoles, computers, and handheld platforms from the RAWG API.
+- View platform cards with artwork, game counts, and descriptions.
+- Navigate to a platform-specific games collection.
+- Filter platform games by genre and rating.
+- Responsive platform grids with empty, loading, and error states.
+
 ### Game Details
 
 - Hero section with game artwork and key information.
@@ -58,6 +66,12 @@ A modern gaming discovery platform built with **Next.js 16**, **TypeScript**, an
 - Click-to-navigate to the game detail page.
 - Spinner loading state and no-results feedback.
 - Outside-click closing behavior with a reusable custom hook.
+
+### Navigation
+
+- Shared navigation links for Home, Games, Genres, and Platforms.
+- Active navigation styling for the current page and nested detail pages.
+- Responsive navigation in both home and catalog headers.
 
 ## 🛠 Tech Stack
 
@@ -86,6 +100,8 @@ app
 ├── games
 ├── genres
 │   └── [slug]
+├── platforms
+│   └── [id]
 ├── globals.css
 ├── layout.tsx
 └── page.tsx
@@ -93,7 +109,12 @@ components
 ├── game
 ├── games
 ├── genres
-└── home
+├── home
+└── shared
+	├── CatalogHeader.tsx
+	├── DiscoveryCard.tsx
+	├── PrimaryNavigation.tsx
+	└── SectionHeader.tsx
 hooks
 lib
 └── rawg.ts
@@ -152,7 +173,7 @@ npm run start      # Start the production server
 - [x] Game Details
 - [x] Search
 - [x] Genres
-- [ ] Platforms
+- [x] Platforms
 - [ ] Authentication
 - [ ] Wishlist
 - [ ] Profile

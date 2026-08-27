@@ -68,7 +68,6 @@ export function GamesFilter({
     }
     router.push(`${basePath}?${params.toString()}`);
   };
-
   return (
     <div
       className={`grid gap-4 rounded-3xl border border-slate-200/70 bg-white/80 p-5 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/70 ${showGenreFilter && showPlatformFilter && showRatingFilter ? "lg:grid-cols-[1fr_1fr_1fr_auto]" : "lg:grid-cols-[1fr_1fr_auto]"}`}

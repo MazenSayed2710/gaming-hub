@@ -4,12 +4,14 @@ interface GamesPaginationProps {
   currentPage: number;
   totalPages: number;
   searchParams: Record<string, string | undefined>;
+  basePath?: string;
 }
 
 export function GamesPagination({
   currentPage,
   totalPages,
   searchParams,
+  basePath = "/games",
 }: GamesPaginationProps) {
   const createPageHref = (page: number) => {
     const params = new URLSearchParams();
@@ -27,7 +29,7 @@ export function GamesPagination({
     }
 
     params.set("page", String(page));
-    return `/games?${params.toString()}`;
+    return `${basePath}?${params.toString()}`;
   };
 
   return (

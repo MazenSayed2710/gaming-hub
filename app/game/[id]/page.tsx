@@ -1,4 +1,4 @@
-import GamesHeader from "@/components/games/GamesHeader";
+import CatalogHeader from "@/components/shared/CatalogHeader";
 import Image from "next/image";
 import About from "@/components/game/About";
 import ScreenshotsSection from "@/components/game/ScreenshotsSection";
@@ -39,7 +39,7 @@ export default async function GameDetailPage({ params }: GameDetailPageProps) {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(129,140,248,0.16),transparent_40%)] text-slate-900 transition-colors duration-300 dark:text-slate-100">
-      <GamesHeader />
+      <CatalogHeader />
 
       <main className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-4xl border border-slate-200/70 bg-white/80 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/70">
