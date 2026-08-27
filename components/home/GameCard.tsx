@@ -8,7 +8,6 @@ interface GameCardProps {
 
 export function GameCard({ game }: GameCardProps) {
   const imageSrc = game.background_image ?? "/placeholder-game.svg";
-
   return (
     <Link href={`/game/${game.id}`} className="group block">
       <article className="overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.25)] backdrop-blur transition duration-300 hover:-translate-y-1 hover:shadow-[0_25px_70px_-20px_rgba(15,23,42,0.35)] dark:border-slate-800/80 dark:bg-slate-900/70">

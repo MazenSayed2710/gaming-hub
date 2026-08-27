@@ -33,6 +33,12 @@ A modern gaming discovery platform built with **Next.js 16**, **TypeScript**, an
 - Extended reusable RAWG API layer.
 - Clean, reusable, and component-based architecture.
 
+### Genres
+
+- Browse popular genres from the RAWG API.
+- Navigate from a genre to a filtered games collection.
+- Responsive genre card grid with loading and error states.
+
 ### Game Details
 
 - Hero section with game artwork and key information.
@@ -64,9 +70,8 @@ A modern gaming discovery platform built with **Next.js 16**, **TypeScript**, an
 
 ### UI & UX
 
-- Embla Carousel
-- Framer Motion
 - `next/image`
+- `lucide-react`
 
 ### API
 
@@ -75,17 +80,23 @@ A modern gaming discovery platform built with **Next.js 16**, **TypeScript**, an
 ## 📁 Project Structure
 
 ```text
-src
-├── app
-├── components
-│   ├── home
-│   ├── games
-│   ├── shared
-│   └── ui
-├── hooks
-├── lib
-├── types
-└── utils
+app
+├── api/search
+├── game/[id]
+├── games
+├── genres
+│   └── [slug]
+├── globals.css
+├── layout.tsx
+└── page.tsx
+components
+├── game
+├── games
+├── genres
+└── home
+hooks
+lib
+└── rawg.ts
 ```
 
 ## ⚡ Performance
@@ -96,6 +107,7 @@ src
 - Component-based architecture.
 - Responsive and accessible UI.
 - URL-driven filtering for better navigation and shareable links.
+- Parallel server-side requests for related page data.
 
 ## 🚀 Getting Started
 
@@ -125,13 +137,21 @@ RAWG_API_KEY=YOUR_API_KEY
 npm run dev
 ```
 
+### Available scripts
+
+```bash
+npm run lint       # Run ESLint
+npm run build      # Create a production build
+npm run start      # Start the production server
+```
+
 ## 📌 Roadmap
 
 - [x] Home Page
 - [x] Browse Games
 - [x] Game Details
 - [x] Search
-- [ ] Genres
+- [x] Genres
 - [ ] Platforms
 - [ ] Authentication
 - [ ] Wishlist

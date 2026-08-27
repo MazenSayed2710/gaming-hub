@@ -39,7 +39,6 @@ export default function SearchBar({ className }: SearchBarProps) {
         }
 
         const data = await res.json();
-        console.log("Search results:", data.games);
         setResults(data.games ?? []);
       } catch {
         setError("Unable to load results right now.");

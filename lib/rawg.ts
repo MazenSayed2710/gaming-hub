@@ -67,7 +67,6 @@ async function fetchRawg<T>(
 
   const url = new URL(`${RAWG_BASE_URL}${path}`);
   url.searchParams.set("key", apiKey);
-
   Object.entries(params ?? {}).forEach(([key, value]) => {
     if (value !== undefined) {
       url.searchParams.set(key, String(value));
@@ -85,93 +84,113 @@ async function fetchRawg<T>(
   return response.json() as Promise<T>;
 }
 
-export async function getFeaturedGames(): Promise<RawgGame[]> {
-  const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", {
-    ordering: "-added",
-    page_size: 5,
-  });
-
-  return data.results;
-}
-
 export async function getTrendingGames(): Promise<RawgGame[]> {
-  const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", {
-    ordering: "-added",
-    page_size: 10,
-  });
+  try {
+    const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", {
+      ordering: "-added",
+      page_size: 10,
+    });
 
-  return data.results;
+    return data.results;
+  } catch {
+    return [];
+  }
 }
 
 export async function getTopRatedGames(): Promise<RawgGame[]> {
-  const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", {
-    ordering: "-rating",
-    page_size: 10,
-  });
+  try {
+    const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", {
+      ordering: "-rating",
+      page_size: 10,
+    });
 
-  return data.results;
+    return data.results;
+  } catch {
+    return [];
+  }
 }
 
 export async function getNewReleases(): Promise<RawgGame[]> {
-  const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", {
-    ordering: "-released",
-    page_size: 10,
-  });
+  try {
+    const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", {
+      ordering: "-released",
+      page_size: 10,
+    });
 
-  return data.results;
+    return data.results;
+  } catch {
+    return [];
+  }
 }
 
 export async function getGenres(): Promise<RawgGenre[]> {
-  const data = await fetchRawg<RawgListResponse<RawgGenre>>("/genres", {
-    page_size: 12,
-  });
+  try {
+    const data = await fetchRawg<RawgListResponse<RawgGenre>>("/genres", {
+      page_size: 12,
+    });
 
-  return data.results;
+    return data.results;
+  } catch {
+    return [];
+  }
 }
 
 export async function getPlatforms(): Promise<RawgPlatform[]> {
-  const data = await fetchRawg<RawgListResponse<RawgPlatform>>("/platforms", {
-    page_size: 12,
-  });
+  try {
+    const data = await fetchRawg<RawgListResponse<RawgPlatform>>("/platforms", {
+      page_size: 12,
+    });
 
-  return data.results;
+    return data.results;
+  } catch {
+    return [];
+  }
 }
 
 export async function getGames(
   query: GamesQueryParams = {},
 ): Promise<GamesListResult> {
-  const page = query.page ?? 1;
-  const minRating = query.minRating ? Number(query.minRating) : undefined;
+  try {
+    const page = query.page ?? 1;
+    const minRating = query.minRating ? Number(query.minRating) : undefined;
 
-  const params: Record<string, string | number | undefined> = {
-    page,
-    page_size: 12,
-    ordering: "-added",
-  };
+    const params: Record<string, string | number | undefined> = {
+      page,
+      page_size: 12,
+      ordering: "-added",
+    };
 
-  if (query.genre) {
-    params.genres = query.genre;
-  }
-
-  if (query.platform) {
-    params.platforms = query.platform;
-  }
-
-  const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", params);
-  const filteredGames = data.results.filter((game) => {
-    if (minRating && game.rating < minRating) {
-      return false;
+    if (query.genre) {
+      params.genres = query.genre;
     }
 
-    return true;
-  });
+    if (query.platform) {
+      params.platforms = query.platform;
+    }
 
-  return {
-    games: filteredGames,
-    count: data.count,
-    next: data.next,
-    previous: data.previous,
-  };
+    const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", params);
+    const filteredGames = data.results.filter((game) => {
+      if (minRating && game.rating < minRating) {
+        return false;
+      }
+
+      return true;
+    });
+
+    return {
+      games: filteredGames,
+      count: data.count,
+      next: data.next,
+      previous: data.previous,
+    };
+  } catch {
+    return {
+      games: [],
+      count: 0,
+      next: null,
+      previous: null,
+    };
+  }
 }
 
 export async function getGameById(id: string): Promise<RawgGameDetails> {
@@ -182,15 +201,18 @@ export async function searchGames(query: string): Promise<RawgGame[]> {
   if (!query.trim()) {
     return [];
   }
-  console.log("Searching games with query:", query);
 
-  const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", {
-    search: query.trim(),
-    page_size: 6,
-    ordering: "-added",
-  });
+  try {
+    const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", {
+      search: query.trim(),
+      page_size: 6,
+      ordering: "-added",
+    });
 
-  return data.results;
+    return data.results;
+  } catch {
+    return [];
+  }
 }
 
 export interface RawgScreenshot {
@@ -199,8 +221,12 @@ export interface RawgScreenshot {
 }
 
 export async function getScreenshots(id: string): Promise<RawgScreenshot[]> {
-  const data = await fetchRawg<{ results: RawgScreenshot[] }>(
-    `/games/${id}/screenshots`,
-  );
-  return data.results;
+  try {
+    const data = await fetchRawg<{ results: RawgScreenshot[] }>(
+      `/games/${id}/screenshots`,
+    );
+    return data.results;
+  } catch {
+    return [];
+  }
 }

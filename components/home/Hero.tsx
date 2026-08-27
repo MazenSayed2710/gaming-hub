@@ -40,7 +40,7 @@ export function Hero({ games }: HeroProps) {
               Explore games
             </Link>
             <Link
-              href="#genres"
+              href="/genres"
               className="rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20"
             >
               Browse genres
