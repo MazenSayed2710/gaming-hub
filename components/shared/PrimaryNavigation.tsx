@@ -2,20 +2,47 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Gamepad2, Grid2X2, Home, Monitor } from "lucide-react";
 
 const navigationItems = [
-  { href: "/", label: "Home" },
-  { href: "/games", label: "Games" },
-  { href: "/genres", label: "Genres" },
-  { href: "/platforms", label: "Platforms" },
+  {
+    href: "/",
+    label: "Home",
+    icon: Home,
+  },
+  {
+    href: "/games",
+    label: "Games",
+    icon: Gamepad2,
+  },
+  {
+    href: "/genres",
+    label: "Genres",
+    icon: Grid2X2,
+  },
+  {
+    href: "/platforms",
+    label: "Platforms",
+    icon: Monitor,
+  },
+  {
+    href: "/favorites",
+    label: "Favorites",
+  },
+  {
+    href: "/wishlist",
+    label: "Wishlist",
+  },
 ];
 
 export default function PrimaryNavigation() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-wrap items-center gap-2" aria-label="Primary navigation">
+    <nav className="flex items-center gap-1" aria-label="Primary navigation">
       {navigationItems.map((item) => {
+        const Icon = item.icon;
+
         const isActive =
           item.href === "/"
             ? pathname === "/"
@@ -26,12 +53,13 @@ export default function PrimaryNavigation() {
             key={item.href}
             href={item.href}
             aria-current={isActive ? "page" : undefined}
-            className={
+            className={`flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition ${
               isActive
-                ? "rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-slate-200"
-                : "rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
-            }
+                ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            }`}
           >
+            {Icon ? <Icon className="h-4 w-4" /> : null}
             {item.label}
           </Link>
         );

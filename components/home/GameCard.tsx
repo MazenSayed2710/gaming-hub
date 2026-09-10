@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { RawgGame } from "@/lib/rawg";
+import { GameActionsLoader } from "./GameActionsLoader";
 
 interface GameCardProps {
   game: RawgGame;
@@ -10,7 +11,7 @@ export function GameCard({ game }: GameCardProps) {
   const imageSrc = game.background_image ?? "/placeholder-game.svg";
   return (
     <Link href={`/game/${game.id}`} className="group block">
-      <article className="overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.25)] backdrop-blur transition duration-300 hover:-translate-y-1 hover:shadow-[0_25px_70px_-20px_rgba(15,23,42,0.35)] dark:border-slate-800/80 dark:bg-slate-900/70">
+      <article className="relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.25)] backdrop-blur transition duration-300 hover:-translate-y-1 hover:shadow-[0_25px_70px_-20px_rgba(15,23,42,0.35)] dark:border-slate-800/80 dark:bg-slate-900/70">
         <div className="relative h-48 overflow-hidden">
           <Image
             src={imageSrc}
@@ -21,6 +22,7 @@ export function GameCard({ game }: GameCardProps) {
             unoptimized
           />
           <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
+          <GameActionsLoader gameId={game.id} />
           <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-sm font-semibold text-slate-900 shadow-sm dark:bg-slate-950/90 dark:text-slate-100">
             ★ {game.rating.toFixed(1)}
           </div>

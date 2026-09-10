@@ -1,6 +1,7 @@
 import { ThemeToggle } from "@/components/home/ThemeToggle";
 import SearchBar from "@/components/games/SearchBar";
 import PrimaryNavigation from "@/components/shared/PrimaryNavigation";
+import { AuthNav } from "@/components/shared/AuthNav";
 
 export default function CatalogHeader() {
   return (
@@ -21,6 +22,7 @@ export default function CatalogHeader() {
           <SearchBar className="w-full sm:w-72" />
           <div className="flex items-center gap-2">
             <ThemeToggle />
+            <AuthNav />
           </div>
         </div>
       </div>

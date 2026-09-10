@@ -61,6 +61,7 @@ export default function SearchBar({ className }: SearchBarProps) {
         onChange={(event) => {
           setQuery(event.target.value);
           setIsOpen(true);
+
           if (!event.target.value.trim()) {
             setResults([]);
             setError(null);
@@ -68,8 +69,8 @@ export default function SearchBar({ className }: SearchBarProps) {
           }
         }}
         onFocus={() => setIsOpen(true)}
-        placeholder="Search games"
-        className="w-full rounded-full border border-slate-300 bg-white/90 px-4 py-2.5 text-sm text-slate-800 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-100"
+        placeholder="Search games..."
+        className="w-full rounded-xl border border-slate-200 bg-slate-100/70 px-4 py-2.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-indigo-500 dark:focus:bg-slate-900 dark:focus:ring-indigo-500/10"
       />
 
       {isOpen && (query.trim() || loading || error || hasResults) ? (
