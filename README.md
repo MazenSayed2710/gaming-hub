@@ -1,184 +1,148 @@
-# 🎮 GameHub
+# 🎮 Gaming Hub
 
-A modern gaming discovery platform built with **Next.js 16**, **TypeScript**, and the **RAWG API**. Browse trending, top-rated, and newly released games through a clean, responsive interface inspired by modern gaming platforms.
-
-🚧 This project is currently under active development. New features and pages will be added incrementally.
+A modern gaming discovery app built with Next.js 16, TypeScript, Tailwind CSS, and the RAWG API. It helps players browse trending games, discover genres and platforms, and save favorites and wishlist entries with Appwrite authentication.
 
 ## ✨ Features
 
-### Home Page
+### Core browsing experience
 
-- Featured Games hero section.
-- Trending Games slider.
-- Top Rated Games slider.
-- New Releases slider.
-- Popular Genres section.
-- Popular Platforms section.
-- Responsive design for desktop, tablet, and mobile.
-- Dark / Light mode.
-- Skeleton loading for a smooth loading experience.
-- Reusable slider and section components.
-- Smooth hover animations and transitions.
+- Home page with hero, trending games, top-rated games, and new releases
+- Browse all games with filtering by genre, platform, and rating
+- Genre directory and genre-specific game pages
+- Platform directory and platform-specific game pages
+- Search bar with live results and navigation to game details
+- Responsive card-based grid layouts across desktop and mobile viewports
+- Shared navigation with active states for current and nested routes
 
-### Browse Games
+### Game details and discovery
 
-- Browse a collection of games from the RAWG API.
-- Filter games by genre, platform, and rating.
-- URL-based filtering using search parameters.
-- Server-side pagination with Previous and Next navigation.
-- Responsive game grid using reusable `GameCard` components.
-- Click any game card to navigate to its details page.
-- Skeleton loading for the entire page.
-- Graceful error handling.
-- Extended reusable RAWG API layer.
-- Clean, reusable, and component-based architecture.
+- Full game detail pages with artwork, platform information, description, screenshots, and similar titles
+- Reusable game cards and section components
+- Empty, loading, and error states throughout the app
+- Server-side data fetching and URL-driven filtering
 
-### Genres
+### Authentication and user profiles
 
-- Browse popular genres from the RAWG API.
-- Navigate from a genre to a filtered games collection.
-- Responsive genre card grid with loading and error states.
+- Sign in and sign up flows with Appwrite authentication
+- Protected profile page displaying account details and sign out action
+- Secure user-specific saved collections using Appwrite TablesDB
 
-### Platforms
+### Wishlist and favorites
 
-- Browse consoles, computers, and handheld platforms from the RAWG API.
-- View platform cards with artwork, game counts, and descriptions.
-- Navigate to a platform-specific games collection.
-- Filter platform games by genre and rating.
-- Responsive platform grids with empty, loading, and error states.
+- Add or remove games from favorites and wishlist from the game cards
+- Protected collection pages for saved games
+- Per-user persistence with Appwrite row storage
+- Empty state handling and pagination for saved lists
 
-### Game Details
+### UX and performance
 
-- Hero section with game artwork and key information.
-- About section with the game description.
-- Screenshots gallery.
-- Similar games recommendations.
-- Extended reusable RAWG API layer.
-- Skeleton loading for the entire page.
-- Responsive design for desktop, tablet, and mobile.
-- Graceful error handling.
+- Dark and light mode styling
+- Route-level loading states and skeleton screens
+- Optimized images with next/image
+- Clean, reusable architecture with server and client separation
 
-### Search
+## 🛠 Tech stack
 
-- Search input in the app header.
-- Debounced live search results while typing.
-- Responsive dropdown results with game image, rating, and title.
-- Click-to-navigate to the game detail page.
-- Spinner loading state and no-results feedback.
-- Outside-click closing behavior with a reusable custom hook.
-
-### Navigation
-
-- Shared navigation links for Home, Games, Genres, and Platforms.
-- Active navigation styling for the current page and nested detail pages.
-- Responsive navigation in both home and catalog headers.
-
-## 🛠 Tech Stack
-
-### Frontend
-
-- Next.js 16 (App Router)
-- React
+- Next.js 16
+- React 19
 - TypeScript
 - Tailwind CSS
+- Appwrite
+- RAWG API
+- Lucide React
 
-### UI & UX
+## 🔐 Environment variables
 
-- `next/image`
-- `lucide-react`
+Create a .env.local file in the project root with the following values:
 
-### API
-
-- RAWG Video Games Database API
-
-## 📁 Project Structure
-
-```text
-app
-├── api/search
-├── game/[id]
-├── games
-├── genres
-│   └── [slug]
-├── platforms
-│   └── [id]
-├── globals.css
-├── layout.tsx
-└── page.tsx
-components
-├── game
-├── games
-├── genres
-├── home
-└── shared
-	├── CatalogHeader.tsx
-	├── DiscoveryCard.tsx
-	├── PrimaryNavigation.tsx
-	└── SectionHeader.tsx
-hooks
-lib
-└── rawg.ts
+```env
+RAWG_API_KEY=your_rawg_api_key
+NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
+NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_appwrite_project_id
+APPWRITE_API_KEY=your_appwrite_server_key
+DATABASE_ID=your_appwrite_database_id
+TABLE_ID=your_appwrite_table_id
 ```
 
-## ⚡ Performance
+## 🚀 Getting started
 
-- Server-side data fetching using Server Components.
-- Optimized images with `next/image`.
-- Reusable API layer.
-- Component-based architecture.
-- Responsive and accessible UI.
-- URL-driven filtering for better navigation and shareable links.
-- Parallel server-side requests for related page data.
-
-## 🚀 Getting Started
-
-### Clone the repository
-
-```bash
-git clone <repository-url>
-```
-
-### Install dependencies
+### 1. Install dependencies
 
 ```bash
 npm install
 ```
 
-### Configure environment variables
-
-Create a `.env.local` file and add:
-
-```env
-RAWG_API_KEY=YOUR_API_KEY
-```
-
-### Start the development server
+### 2. Start the development server
 
 ```bash
 npm run dev
 ```
 
+### 3. Build for production
+
+```bash
+npm run build
+```
+
+### 4. Run the production build locally
+
+```bash
+npm run start
+```
+
 ### Available scripts
 
 ```bash
-npm run lint       # Run ESLint
-npm run build      # Create a production build
-npm run start      # Start the production server
+npm run dev
+npm run build
+npm run start
+npm run lint
 ```
 
-## 📌 Roadmap
+## 📁 Project structure
 
-- [x] Home Page
-- [x] Browse Games
-- [x] Game Details
-- [x] Search
-- [x] Genres
-- [x] Platforms
-- [ ] Authentication
-- [ ] Wishlist
-- [ ] Profile
-- [ ] SEO Optimization
+```text
+app/
+├── api/
+│   ├── appwrite/
+│   ├── search/
+│   └── user-games/
+├── auth/
+│   ├── login/
+│   └── signup/
+├── favorites/
+├── game/[id]/
+├── games/
+├── genres/
+│   └── [slug]/
+├── platforms/
+│   └── [id]/
+├── profile/
+├── wishlist/
+├── globals.css
+├── layout.tsx
+├── loading.tsx
+├── page.tsx
+├── providers.tsx
+components/
+├── auth/
+├── game/
+├── games/
+├── genres/
+├── home/
+├── shared/
+hooks/
+lib/
+├── rawg.ts
+├── user-games.ts
+public/
+README.md
+```
+
+## 📌 Notes
+
+This project uses a server-first architecture with Next.js App Router, route-level loading states, and Appwrite for authentication and user data storage. The saved games feature is backed by Appwrite TablesDB rather than the older document/collections API.
 
 ## 📄 License
 
-This project is built for educational purposes and portfolio showcase.
+This project is intended for educational and portfolio use.
