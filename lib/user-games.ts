@@ -20,8 +20,8 @@ interface UserGamesRow extends Models.Row {
   wishlist?: unknown;
 }
 
-const projectId = process.env.NEXT_APPWRITE_PROJECT_ID!;
-const endpoint = process.env.NEXT_APPWRITE_ENDPOINT!;
+const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
+const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
 const databaseId = process.env.DATABASE_ID!;
 const tableId = process.env.TABLE_ID!;
 
