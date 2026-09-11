@@ -1,7 +1,6 @@
 import { GameCard } from "@/components/home/GameCard";
 import { GamesFilter } from "@/components/games/GamesFilter";
 import { GamesPagination } from "@/components/games/GamesPagination";
-import CatalogHeader from "@/components/shared/CatalogHeader";
 import SectionHeader from "@/components/shared/SectionHeader";
 import { getGames, getGenres, getPlatforms } from "@/lib/rawg";
 import { notFound } from "next/navigation";
@@ -38,8 +37,6 @@ export default async function PlatformDetailPage({
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(129,140,248,0.16),transparent_40%)] text-slate-900 transition-colors duration-300 dark:text-slate-100">
-      <CatalogHeader />
-
       <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Platform spotlight"
