@@ -18,8 +18,7 @@ export function GameCard({ game }: GameCardProps) {
             alt={game.name}
             fill
             className="object-cover transition duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 33vw"
-            unoptimized
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
           <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
           <GameActionsLoader gameId={game.id} />

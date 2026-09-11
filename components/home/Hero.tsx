@@ -68,7 +68,7 @@ export function Hero({ games }: HeroProps) {
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 45vw"
-              unoptimized
+              preload
             />
           </div>
         </div>

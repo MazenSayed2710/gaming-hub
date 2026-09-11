@@ -1,5 +1,4 @@
 import { GameCard } from "@/components/home/GameCard";
-import CatalogHeader from "@/components/shared/CatalogHeader";
 import { GamesFilter } from "@/components/games/GamesFilter";
 import { GamesPagination } from "@/components/games/GamesPagination";
 import { getGames, getGenres, getPlatforms } from "@/lib/rawg";
@@ -35,8 +34,6 @@ export default async function GenreDetailPage({
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(129,140,248,0.16),transparent_40%)] text-slate-900 transition-colors duration-300 dark:text-slate-100">
-      <CatalogHeader />
-
       <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
         <section className="overflow-hidden rounded-4xl border border-slate-200/70 bg-white/80 p-8 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/70">
           <div className="max-w-2xl">
