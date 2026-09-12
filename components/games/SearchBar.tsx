@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import type { RawgGame } from "@/lib/rawg";
+import { searchGames } from "@/lib/api/search";
 
 interface SearchBarProps {
   className?: string;
@@ -17,41 +18,32 @@ export default function SearchBar({ className }: SearchBarProps) {
   const [error, setError] = useState<string | null>(null);
   const { ref, isOpen, setIsOpen } = useClickOutside<HTMLDivElement>();
   useEffect(() => {
-    const clearSearch = () => {
-      if (!query.trim()) {
-        setResults([]);
-        setError(null);
-        setLoading(false);
-        return;
-      }
-    };
-    clearSearch();
+    if (!query.trim()) return;
+
+    const controller = new AbortController();
     const runSearch = setTimeout(async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const res = await fetch(
-          `/api/search?query=${encodeURIComponent(query.trim())}`,
-        );
-        if (!res.ok) {
-          throw new Error("Search failed");
-        }
-
-        const data = await res.json();
-        setResults(data.games ?? []);
+        const games = await searchGames(query, controller.signal);
+        if (!controller.signal.aborted) setResults(games);
       } catch {
+        if (controller.signal.aborted) return;
         setError("Unable to load results right now.");
         setResults([]);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     }, 300);
 
-    return () => clearTimeout(runSearch);
+    return () => {
+      clearTimeout(runSearch);
+      controller.abort();
+    };
   }, [query]);
 
-  const hasResults = useMemo(() => results.length > 0, [results]);
+  const hasResults = results.length > 0;
 
   return (
     <div ref={ref} className={`relative w-full max-w-sm ${className ?? ""}`}>

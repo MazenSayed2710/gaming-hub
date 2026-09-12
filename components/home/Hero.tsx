@@ -67,7 +67,7 @@ export function Hero({ games }: HeroProps) {
               alt={featuredGame.name}
               fill
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 45vw"
+              sizes="(min-width: 1280px) 478px, (min-width: 1024px) calc(45vw - 98px), (min-width: 768px) calc(100vw - 132px), (min-width: 640px) calc(100vw - 116px), calc(100vw - 100px)"
               preload
             />
           </div>

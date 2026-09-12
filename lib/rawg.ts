@@ -147,6 +147,16 @@ export async function getPlatforms(): Promise<RawgPlatform[]> {
   }
 }
 
+export async function getHomeSections() {
+  const [topRatedGames, newReleases, genres, platforms] = await Promise.all([
+    getTopRatedGames(),
+    getNewReleases(),
+    getGenres(),
+    getPlatforms(),
+  ]);
+  return { topRatedGames, newReleases, genres, platforms };
+}
+
 export async function getGames(
   query: GamesQueryParams = {},
 ): Promise<GamesListResult> {

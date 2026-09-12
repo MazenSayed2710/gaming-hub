@@ -29,7 +29,7 @@ export function GameSection({
             key={game.id}
             className="min-w-65 max-w-65 shrink-0 snap-start md:min-w-70 md:max-w-70"
           >
-            <GameCard game={game} />
+            <GameCard game={game} sizes="(min-width: 768px) 280px, 260px" />
           </div>
         ))}
       </HorizontalScroller>

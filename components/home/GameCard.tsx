@@ -5,9 +5,13 @@ import { GameActionsLoader } from "./GameActionsLoader";
 
 interface GameCardProps {
   game: RawgGame;
+  sizes?: string;
 }
 
-export function GameCard({ game }: GameCardProps) {
+export function GameCard({
+  game,
+  sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw",
+}: GameCardProps) {
   const imageSrc = game.background_image ?? "/placeholder-game.svg";
   return (
     <Link href={`/game/${game.id}`} className="group block">
@@ -18,7 +22,7 @@ export function GameCard({ game }: GameCardProps) {
             alt={game.name}
             fill
             className="object-cover transition duration-500 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            sizes={sizes}
           />
           <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
           <GameActionsLoader gameId={game.id} />

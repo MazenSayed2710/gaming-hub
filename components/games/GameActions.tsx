@@ -1,75 +1,31 @@
 "use client";
 
 import { Heart, ListPlus } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useAuth } from "@appwrite.io/react";
+import { useState } from "react";
+import { useUser } from "@appwrite.io/react";
 import { useRouter } from "next/navigation";
 
-type UserGameCollection = "favorites" | "wishlist";
+import { useSavedGames } from "@/hooks/useSavedGames";
+import type { UserGameCollection } from "@/lib/user-games";
 
 interface GameActionsProps {
   gameId: number;
 }
 
-interface CollectionState {
-  favorites: number[];
-  wishlist: number[];
-}
-
 export function GameActions({ gameId }: GameActionsProps) {
-  const { user, isLoading: authLoading } = useAuth();
+  const { user, isLoading: authLoading } = useUser();
   const router = useRouter();
 
-  const [state, setState] = useState<CollectionState>({
-    favorites: [],
-    wishlist: [],
-  });
+  const { state, error, toggleCollection } = useSavedGames(user?.$id);
   const [message, setMessage] = useState("");
   const [pending, setPending] = useState<UserGameCollection | null>(null);
 
-  useEffect(() => {
-    if (!user) return;
-
-    fetch("/api/user-games")
-      .then(async (response) => {
-        if (!response.ok) return;
-
-        const data = (await response.json()) as CollectionState;
-        setState(data);
-      })
-      .catch(() => setMessage("Unable to load saved games"));
-  }, [user]);
-
   const updateCollection = async (collection: UserGameCollection) => {
-    const isSaved = state[collection].includes(gameId);
-
     setPending(collection);
     setMessage("");
 
     try {
-      const response = await fetch("/api/user-games", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          collection,
-          gameId,
-          action: isSaved ? "remove" : "add",
-        }),
-      });
-
-      const data = (await response.json()) as {
-        ids?: number[];
-        error?: string;
-      };
-
-      if (!response.ok || !data.ids) {
-        throw new Error(data.error || "Unable to update saved games");
-      }
-
-      setState((current) => ({
-        ...current,
-        [collection]: data.ids!,
-      }));
+      const isSaved = await toggleCollection(collection, gameId);
 
       setMessage(
         isSaved
@@ -94,6 +50,8 @@ export function GameActions({ gameId }: GameActionsProps) {
   if (authLoading || !user) {
     return null;
   }
+
+  const feedback = message || (error ? "Unable to load saved games" : "");
 
   return (
     <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
@@ -151,9 +109,9 @@ export function GameActions({ gameId }: GameActionsProps) {
         />
       </button>
 
-      {message ? (
+      {feedback ? (
         <span className="absolute right-0 top-11 whitespace-nowrap rounded-lg bg-slate-950 px-2 py-1 text-xs text-white dark:bg-slate-100 dark:text-slate-950">
-          {message}
+          {feedback}
         </span>
       ) : null}
     </div>

@@ -24,6 +24,21 @@ export default async function RootLayout({
   const session = await helpers.readSessionCookie();
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => {
+              let theme;
+              try { theme = localStorage.getItem("theme"); } catch {}
+              if (theme !== "light" && theme !== "dark") {
+                theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+              }
+              document.documentElement.classList.toggle("dark", theme === "dark");
+              try { localStorage.setItem("theme", theme); } catch {}
+            })();`,
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-background text-foreground">
         <Providers session={session}>
           <Header />
