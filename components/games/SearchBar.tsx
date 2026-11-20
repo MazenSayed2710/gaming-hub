@@ -17,6 +17,7 @@ export default function SearchBar({ className }: SearchBarProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { ref, isOpen, setIsOpen } = useClickOutside<HTMLDivElement>();
+
   useEffect(() => {
     if (!query.trim()) return;
 
@@ -44,29 +45,33 @@ export default function SearchBar({ className }: SearchBarProps) {
   }, [query]);
 
   const hasResults = results.length > 0;
+  const showResults = isOpen && Boolean(query.trim());
 
   return (
-    <div ref={ref} className={`relative w-full max-w-sm ${className ?? ""}`}>
+    <div ref={ref} className={`relative w-full ${className ?? ""}`}>
       <input
         type="text"
         value={query}
         onChange={(event) => {
-          setQuery(event.target.value);
+          const nextQuery = event.target.value;
+          setQuery(nextQuery);
           setIsOpen(true);
-
-          if (!event.target.value.trim()) {
-            setResults([]);
-            setError(null);
-            setLoading(false);
-          }
+          setResults([]);
+          setError(null);
+          setLoading(Boolean(nextQuery.trim()));
         }}
         onFocus={() => setIsOpen(true)}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") setIsOpen(false);
+        }}
         placeholder="Search games..."
+        aria-label="Search games"
+        aria-autocomplete="list"
         className="w-full rounded-xl border border-slate-200 bg-slate-100/70 px-4 py-2.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-indigo-500 dark:focus:bg-slate-900 dark:focus:ring-indigo-500/10"
       />
 
-      {isOpen && (query.trim() || loading || error || hasResults) ? (
-        <div className="absolute left-0 top-full z-30 mt-2 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-900">
+      {showResults ? (
+        <div className="absolute right-0 top-full z-30 mt-2 w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-900">
           {loading ? (
             <div className="flex items-center justify-center gap-2 px-4 py-4 text-sm text-slate-500 dark:text-slate-400">
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
@@ -87,7 +92,7 @@ export default function SearchBar({ className }: SearchBarProps) {
           ) : null}
 
           {!loading && hasResults ? (
-            <div className="max-h-80 overflow-y-auto ">
+            <div className="max-h-80 overflow-y-auto">
               {results.map((game) => (
                 <Link
                   key={game.id}
