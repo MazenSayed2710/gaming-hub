@@ -10,7 +10,7 @@ interface HomeSectionsProps {
 
 export async function HomeSections({ trendingGames, data }: HomeSectionsProps) {
   const { topRatedGames, newReleases, genres, platforms } = await data;
-
+  console.log(topRatedGames[1]);
   return (
     <>
       <div id="trending" className="space-y-8">

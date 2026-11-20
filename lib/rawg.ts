@@ -1,5 +1,7 @@
 const RAWG_BASE_URL = "https://api.rawg.io/api";
 
+const BLOCKED_TAGS = ["nudity", "sexual-content", "hentai", "khentai"];
+
 export interface RawgGame {
   id: number;
   name: string;
@@ -9,6 +11,15 @@ export interface RawgGame {
   added: number;
   genres: Array<{ id: number; name: string }>;
   platforms: Array<{ platform: { id: number; name: string } }>;
+  tags?: Array<{ slug: string }> | null;
+}
+
+function isSafeGame(game: RawgGame): boolean {
+  return !game.tags?.some((tag) => BLOCKED_TAGS.includes(tag.slug));
+}
+
+function filterSafeGames(games: RawgGame[]): RawgGame[] {
+  return games.filter(isSafeGame);
 }
 
 export interface RawgGameDetails extends RawgGame {
@@ -91,7 +102,7 @@ export async function getTrendingGames(): Promise<RawgGame[]> {
       page_size: 10,
     });
 
-    return data.results;
+    return filterSafeGames(data.results);
   } catch {
     return [];
   }
@@ -104,7 +115,7 @@ export async function getTopRatedGames(): Promise<RawgGame[]> {
       page_size: 10,
     });
 
-    return data.results;
+    return filterSafeGames(data.results);
   } catch {
     return [];
   }
@@ -117,7 +128,7 @@ export async function getNewReleases(): Promise<RawgGame[]> {
       page_size: 10,
     });
 
-    return data.results;
+    return filterSafeGames(data.results);
   } catch {
     return [];
   }
@@ -179,7 +190,7 @@ export async function getGames(
     }
 
     const data = await fetchRawg<RawgListResponse<RawgGame>>("/games", params);
-    const filteredGames = data.results.filter((game) => {
+    const filteredGames = filterSafeGames(data.results).filter((game) => {
       if (minRating && game.rating < minRating) {
         return false;
       }
@@ -204,7 +215,12 @@ export async function getGames(
 }
 
 export async function getGameById(id: string): Promise<RawgGameDetails> {
-  return fetchRawg<RawgGameDetails>(`/games/${id}`);
+  const game = await fetchRawg<RawgGameDetails>(`/games/${id}`);
+  if (!isSafeGame(game)) {
+    throw new Error("Game contains blocked content tags");
+  }
+
+  return game;
 }
 
 export async function searchGames(query: string): Promise<RawgGame[]> {
@@ -219,7 +235,7 @@ export async function searchGames(query: string): Promise<RawgGame[]> {
       ordering: "-added",
     });
 
-    return data.results;
+    return filterSafeGames(data.results);
   } catch {
     return [];
   }
